@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Subtitle from "../components/Subtitle.astro";
+// import MovieData from "../components/Data.astro";
+import Heading from "../components/Heading.svelte";
+import Counter from "../components/Counter.tsx";
+import { Link } from "../components/Link.tsx";
+
+export async function getStaticPaths() {
+  const movies = await getCollection("movies");
+  return movies.map((movie) => ({
+    params: { id: movie.id },
+    props: { movie },
+  }));
+}
+const { movie } = Astro.props;
+---
+
+<Layout>
+  <div class="klass" id="tsparticles"></div>
+  <Heading>{movie.data.name}</Heading>
+  <Subtitle title={movie.data.original_name} />
+  <Link href={movie.data.csfd} target="_blank">ČSFD</Link>
+  <p set:html={movie.data.description} />
+  <p><strong>Rok:</strong> {movie.data.year}</p>
+  <p><strong>Hodnocení:</strong> {movie.data.rating}</p>
+  <Image
+    src={movie.data.image}
+    alt={movie.data.name}
+    height="1000"
+    width="180"
+    loading="eager"
+  />
+  <Counter client:visible />
+   <!-- <Counter client:idle /> -->
+
+  <!-- <MovieData server:defer id={movie.id} /> -->
+</Layout>
+
+<script>
+  import {xx} from 'xx';
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
+  });
+</script>

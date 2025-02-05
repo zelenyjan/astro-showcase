@@ -1,0 +1,8 @@
+---
+const { id } = Astro.props;
+const url = `http://127.0.0.1:8000/api/movies/${id}/`;
+const res = await fetch(url).then((res) => res.text());
+await new Promise((resolve) => setTimeout(resolve, 3000));
+---
+
+<pre set:html={res} />
